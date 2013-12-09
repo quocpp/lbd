@@ -86,7 +86,19 @@ public class MainActivity extends ActionBarActivity {
                 doc = Jsoup.connect(urls[0]).get();
                 Elements table = doc.getElementsByClass("mtn");
                 Document doc1 = Jsoup.parse(table.toString());
-                Elements even = doc1.getElementsByClass("even");
+                Elements evens = doc1.getElementsByClass("even");
+                Elements a = null;
+                for (int i = 0; i < evens.size(); i++)
+                {
+                    ArrayList<String> rowTable = new ArrayList<String>();
+                    Document rows = Jsoup.parse(evens.get(i).toString());
+                    a = rows.getElementsByClass("fd");
+                    //rowTable.add();
+                    rowTable.add(rows.getElementsByClass("fh").text());
+                    rowTable.add(rows.getElementsByClass("fs").text());
+                    rowTable.add(rows.getElementsByClass("fa").text());
+                    lbdTable.add(rowTable);
+                }
                 Log.d("BEAN",table.toString());
                 Log.d("BEAN","DONE");
             }
