@@ -34,7 +34,8 @@ public class MainActivity extends ActionBarActivity {
         }
         Log.d("BEAN","START");
 
-        new getHtml().execute("http://www.livescore.com/soccer/england/premier-league/fixtures");
+        //new getHtml().execute("http://www.livescore.com/soccer/england/premier-league/fixtures");
+        new getHtml().execute("http://www.livescore.com/soccer/england/premier-league/fixtures/7-days/");
     }
 
 
@@ -84,19 +85,24 @@ public class MainActivity extends ActionBarActivity {
             {
                 ArrayList<ArrayList<String>> lbdTable = new ArrayList<ArrayList<String>>();
                 doc = Jsoup.connect(urls[0]).get();
-                Elements table = doc.getElementsByClass("mtn");
-                Document doc1 = Jsoup.parse(table.toString());
-                Elements evens = doc1.getElementsByClass("even");
-                Elements a = null;
+                Elements table = doc.getElementsByClass("league-table");
+                Elements evens = table.get(0).getElementsByTag("tr");
                 for (int i = 0; i < evens.size(); i++)
                 {
                     ArrayList<String> rowTable = new ArrayList<String>();
-                    Document rows = Jsoup.parse(evens.get(i).toString());
-                    a = rows.getElementsByClass("fd");
-                    //rowTable.add();
-                    rowTable.add(rows.getElementsByClass("fh").text());
-                    rowTable.add(rows.getElementsByClass("fs").text());
-                    rowTable.add(rows.getElementsByClass("fa").text());
+                    if(evens.get(i).className() == "")
+                    {
+                        rowTable.add("0");
+                        rowTable.add(evens.get(i).text());
+                    }
+                    else
+                    {
+                        rowTable.add("1");
+                        rowTable.add(evens.get(i).getElementsByClass("fd").get(0).text());
+                        rowTable.add(evens.get(i).getElementsByClass("fh").get(0).text());
+                        rowTable.add(evens.get(i).getElementsByClass("fs").get(0).text());
+                        rowTable.add(evens.get(i).getElementsByClass("fa").get(0).text());
+                    }
                     lbdTable.add(rowTable);
                 }
                 Log.d("BEAN",table.toString());
