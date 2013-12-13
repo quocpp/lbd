@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.GridView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -75,44 +76,61 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private class getHtml extends AsyncTask<String,Void,Void>
+    private class getHtml extends AsyncTask<String,Void,ArrayList<ArrayList<String>>>
     {
         @Override
-        protected Void doInBackground(String... urls)
+        protected ArrayList<ArrayList<String>> doInBackground(String... urls)
         {
             Document doc = null;
+            ArrayList<ArrayList<String>> lbdTable = new ArrayList<ArrayList<String>>();
             try
             {
-                ArrayList<ArrayList<String>> lbdTable = new ArrayList<ArrayList<String>>();
                 doc = Jsoup.connect(urls[0]).get();
                 Elements table = doc.getElementsByClass("league-table");
                 Elements evens = table.get(0).getElementsByTag("tr");
                 for (int i = 0; i < evens.size(); i++)
                 {
                     ArrayList<String> rowTable = new ArrayList<String>();
-                    if(evens.get(i).className() == "")
+                /*    if(evens.get(i).className() == "")
                     {
                         rowTable.add("0");
                         rowTable.add(evens.get(i).text());
                     }
                     else
-                    {
+                    {*/
+
+                        if(evens.hasClass("fd"))
+                        {
                         rowTable.add("1");
                         rowTable.add(evens.get(i).getElementsByClass("fd").get(0).text());
                         rowTable.add(evens.get(i).getElementsByClass("fh").get(0).text());
                         rowTable.add(evens.get(i).getElementsByClass("fs").get(0).text());
                         rowTable.add(evens.get(i).getElementsByClass("fa").get(0).text());
-                    }
+                        }
+                        else
+                        {
+                            rowTable.add("0");
+                            rowTable.add(evens.get(i).text());
+                        }
+                   // }
                     lbdTable.add(rowTable);
                 }
                 Log.d("BEAN",table.toString());
                 Log.d("BEAN","DONE");
+
             }
             catch (Exception e)
             {
                 Log.d("BEAN",e.toString());
             }
-            return null;
+
+            return lbdTable;
+        }
+
+        public void onPostExecute(ArrayList<ArrayList<String>> table)
+        {
+            GridView gridview = (GridView) findViewById(R.id.gridview);
+            gridview.setAdapter(new DataAdapter(com.LBD.app.MainActivity.this,table));
         }
     }
 }
