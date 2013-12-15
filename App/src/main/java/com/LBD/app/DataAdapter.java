@@ -38,16 +38,16 @@ public class DataAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.txtTime = (TextView) convertView.findViewById(com.LBD.app.R.id.txtTime);
-            holder.txtTime.setPadding(100, 10,10 , 10);
+            holder.txtTime.setPadding(10, 10,10 , 10);
 
             holder.txtFirstTeam = (TextView) convertView.findViewById(com.LBD.app.R.id.txtFirstTeam);
-            holder.txtFirstTeam.setPadding(100, 10, 10, 10);
+            holder.txtFirstTeam.setPadding(10, 10, 10, 10);
 
             holder.txtResult = (TextView) convertView.findViewById(com.LBD.app.R.id.txtResult);
-            holder.txtResult.setPadding(100, 10, 10, 10);
+            holder.txtResult.setPadding(10, 10, 10, 10);
 
             holder.txtSecondTeam = (TextView) convertView.findViewById(com.LBD.app.R.id.txtSecondTeam);
-            holder.txtSecondTeam.setPadding(100, 10, 10, 10);
+            holder.txtSecondTeam.setPadding(10, 10, 10, 10);
 
             if (position == 0)
             {
@@ -59,20 +59,24 @@ public class DataAdapter extends BaseAdapter {
         {
             holder = (ViewHolder) convertView.getTag();
         }
-        if(myTable.get(position).get(0) == "0")
+        if(holder != null)
         {
-            holder.txtTime.setText(myTable.get(position).get(1));
-            holder.txtFirstTeam.setText("");
-            holder.txtResult.setText("");
-            holder.txtSecondTeam.setText("");
+            if(myTable.get(position).get(0) == "0")
+            {
+                holder.txtTime.setText(myTable.get(position).get(1));
+                holder.txtFirstTeam.setText("");
+                holder.txtResult.setText("");
+                holder.txtSecondTeam.setText("");
+            }
+            else
+            {
+                holder.txtTime.setText(myTable.get(position).get(1));
+                holder.txtFirstTeam.setText(myTable.get(position).get(2));
+                holder.txtResult.setText(myTable.get(position).get(3));
+                holder.txtSecondTeam.setText(myTable.get(position).get(4));
+            }
         }
-        else
-        {
-            holder.txtTime.setText(myTable.get(position).get(1));
-            holder.txtFirstTeam.setText(myTable.get(position).get(2));
-            holder.txtResult.setText(myTable.get(position).get(3));
-            holder.txtSecondTeam.setText(myTable.get(position).get(4));
-        }
+
         return convertView;
     }
 
